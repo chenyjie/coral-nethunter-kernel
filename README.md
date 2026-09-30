@@ -186,3 +186,7 @@ BUILD_CONFIG=build.config.nethunter-cfi ./build/build.sh 2>&1 | tee build.log
 ## 声明
 
 刷内核有风险。请备份 boot 分区、确认 bootloader 已解锁，并保留可回退的原装镜像。
+
+---
+
+本项目由 [Hanako](https://github.com/liliMozi/openhanako) 配合 DeepSeek v4.1 Flash 开展。
