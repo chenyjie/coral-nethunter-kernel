@@ -3,3 +3,6 @@ release/*.zip
 release/*.img
 *.log
 out/
+
+# 厂商 MBN 二进制不随仓库分发（从对应机型镜像自行提取，见 china-telecom/README.md）
+china-telecom/cnmbn/files/mcfg_sw/generic/

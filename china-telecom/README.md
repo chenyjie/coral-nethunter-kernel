@@ -52,16 +52,38 @@ cnmbn/
 ├── post-fs-data.sh
 └── files/mcfg_sw/
     ├── oem_sw.txt                       # 只列这 5 条中国 MBN
-    ├── mbn_sw.dig                       # 厂商摘要文件（32 B）
-    └── generic/mi9t/china/
-        ├── cmcc/commerci/volte_op/mcfg_sw.mbn
-        ├── cu/commerci/volte/mcfg_sw.mbn
-        ├── ct/commerci/volte_op/mcfg_sw.mbn
-        ├── ct/commerci/hvolte_o/mcfg_sw.mbn
-        └── cmhk/commerci/volte_op/mcfg_sw.mbn
+    └── mbn_sw.dig                       # 厂商摘要文件（32 B）
 ```
 
-`files/mcfg_sw/generic/mi9t/` 下的 `.mbn` 是高通 modem 配置二进制，提取自小米 9T 的厂商镜像。放进本仓库只为方便复现，其权利归原厂商；介意的话自行从对应机型镜像中提取。
+## 需要自备 .mbn（不在仓库里）
+
+`files/mcfg_sw/generic/mi9t/` 下的 `.mbn` 是高通 modem 配置二进制，权利归原厂商，**本仓库不包含**。请从小米 9T（同为骁龙 855）的厂商镜像中提取，放到下面的位置：
+
+```
+files/mcfg_sw/generic/mi9t/china/cmcc/commerci/volte_op/mcfg_sw.mbn
+files/mcfg_sw/generic/mi9t/china/cu/commerci/volte/mcfg_sw.mbn
+files/mcfg_sw/generic/mi9t/china/ct/commerci/volte_op/mcfg_sw.mbn
+files/mcfg_sw/generic/mi9t/china/ct/commerci/hvolte_o/mcfg_sw.mbn
+files/mcfg_sw/generic/mi9t/china/cmhk/commerci/volte_op/mcfg_sw.mbn
+```
+
+各文件 SHA256（核对版本用）：
+
+| 路径 | SHA256 |
+|---|---|
+| `.../cmcc/commerci/volte_op/mcfg_sw.mbn` | `13d4be068bdc3002d074783357fb7faf4161e9c75e24ed6bdbe42fca4f6ceb4d` |
+| `.../cu/commerci/volte/mcfg_sw.mbn` | `3033a842f5678c373b6a87b422e595404238fd45ed46765cd4cf2d848714de82` |
+| `.../ct/commerci/volte_op/mcfg_sw.mbn` | `dd41fa0f2dd681b835d9eedef97a7fb144ed1f03dbf1ea139446c23570809a91` |
+| `.../ct/commerci/hvolte_o/mcfg_sw.mbn` | `9d2723294c83b7ae46a3f89fe2fc6abd1be042985e1d5fac89447310528a6e37` |
+| `.../cmhk/commerci/volte_op/mcfg_sw.mbn` | `2a5298211b67a50e9b0cfd1b64b26c0b840745416c27bd6a36b722a193a99fa3` |
+
+补齐后打成模块包：
+
+```bash
+cd cnmbn && zip -r9 ../cnmbn-1.0.zip . -x '.*'
+```
+
+`generic/` 已在 `.gitignore` 里，不会被误提交。
 
 ## 电话（VoLTE / IMS）为什么还不行
 
