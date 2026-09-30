@@ -1,0 +1,9 @@
+# 补丁与脚本必须保持 LF，否则 git apply / bash 会出错
+*.patch text eol=lf
+*.diff  text eol=lf
+*.sh    text eol=lf
+*.c     text eol=lf
+*.config text eol=lf
+nethunter.config text eol=lf
+kernel.config.final text eol=lf
+build.config.* text eol=lf
