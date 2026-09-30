@@ -9,6 +9,12 @@
 - 参考 ROM：Evolution X 12.2 / Android 17（SDK 37）
 - root：ReSukiSU（KernelSU 系，SUSFS hook），version code `35144`
 
+## 已知问题
+
+**内置 WiFi 不工作。** 高通 qcacld 驱动已编进内核（`CONFIG_QCA_CLD_WLAN=y`、`CONFIG_ICNSS=y`），但 `wlan0` 不会出现，手机自带的 WiFi 不可用。
+
+**需要另配 USB 外置网卡。** 本内核已内置 **8812au / 8821au（`CONFIG_88XXAU=y`）** 的驱动，上网与无线功能（monitor / 注入）请通过外接 USB 网卡完成。
+
 ## 功能
 
 | 能力 | 内核侧 |
@@ -16,7 +22,7 @@
 | 外置 USB 网卡注入（8812au / 8821au） | `CONFIG_88XXAU=y` |
 | mac80211 monitor / 注入框架 | `CONFIG_MAC80211=y` `CONFIG_MAC80211_MESH=y` `CONFIG_CFG80211_WEXT=y` |
 | 其它无线注入网卡 | `CONFIG_ATH9K_HTC=y` `CONFIG_ZD1211RW=y` `CONFIG_RTL8187=y` `CONFIG_RTL8XXXU=y` |
-| 内置 WiFi（qcacld） | `CONFIG_QCA_CLD_WLAN=y` `CONFIG_ICNSS=y`（**编进内核**，不依赖 `/vendor` 模块） |
+| 内置 WiFi（qcacld） | `CONFIG_QCA_CLD_WLAN=y` `CONFIG_ICNSS=y`（编进内核；**当前不工作**，见「已知问题」） |
 | HID / BadUSB（键盘、鼠标） | `CONFIG_USB_F_HID=y` `CONFIG_USB_CONFIGFS_F_HID=y` + NetHunter android HID gadget |
 | 外置蓝牙（含 UB500 等） | `CONFIG_BT_HCIBTUSB=y` `CONFIG_BT_HIDP=y` 等 |
 | USB 串口 | `CONFIG_USB_SERIAL=y` + FTDI / PL2303 / CP210X / CH341 / OPTION |
@@ -28,8 +34,6 @@
 | 崩溃现场落盘（可选调试） | `CONFIG_KPANIC_LOGGER=y` |
 
 全部配置见 `config/kernel.config.final`；与原装内核的逐行差异见 `config/config-delta-vs-stock.diff`。
-
-已知一点：内置 WiFi 的 `wlan0` 在部分固件 / 探测时序下出现不稳定（驱动已内建，不涉及模块加载）。NetHunter 的主用途走外置 USB 网卡，不受影响。
 
 ## 成品
 
