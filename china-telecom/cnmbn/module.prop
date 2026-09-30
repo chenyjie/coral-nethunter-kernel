@@ -1,0 +1,6 @@
+id=cnmbn
+name=CN Carrier MBN (coral)
+version=1.0
+versionCode=1
+author=hana
+description=Bind-mount China Mobile/Unicom/Telecom MBN config onto /vendor for Pixel 4/4XL

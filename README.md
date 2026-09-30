@@ -8,12 +8,29 @@
 - 目标设备：Pixel 4 XL（coral）/ Pixel 4（flame），槽位 A/B
 - 参考 ROM：Evolution X 12.2 / Android 17（SDK 37）
 - root：ReSukiSU（KernelSU 系，SUSFS hook），version code `35144`
+- 中国大陆电信：**移动数据可用，拨号不可用**（见下）
 
 ## 已知问题
 
 **内置 WiFi 不工作。** 高通 qcacld 驱动已编进内核（`CONFIG_QCA_CLD_WLAN=y`、`CONFIG_ICNSS=y`），但 `wlan0` 不会出现，手机自带的 WiFi 不可用。
 
 **需要另配 USB 外置网卡。** 本内核已内置 **8812au / 8821au（`CONFIG_88XXAU=y`）** 的驱动，上网与无线功能（monitor / 注入）请通过外接 USB 网卡完成。
+
+## 中国大陆电信用户
+
+中国大陆的电信 SIM 在 Pixel 4 上需要额外处理，与内核本身无关，单列在这里。**只有中国大陆电信用户需要看这一节，其它运营商、其它地区不受影响。**
+
+| 项目 | 状态 |
+|---|---|
+| 移动数据（4G 上网） | ✅ 可用 |
+| 4G 注册 / 信号 | ✅ 正常 |
+| 拨打电话（VoLTE / IMS） | ❌ 不可用，拨号提示「无法连接到移动网络」 |
+
+Pixel 的基带 MBN 里没有中国任何运营商，电信卡只能落到 2G。本仓库 `china-telecom/` 下提供了一个 KernelSU 模块 `cnmbn`，把中国运营商的 MBN bind-mount 到 `/vendor`，解决 4G 上网。
+
+拨号仍不可用：语音走 VoLTE（IMS），需要 carrier config 的中国运营商 IMS 配置与 Google `CarrierServices` 的支持列表，Pixel 出厂都不含。这属于 ROM / 应用层的 IMS 集成缺口，不在内核范围。
+
+安装与细节见 [`china-telecom/README.md`](china-telecom/README.md)。
 
 ## 功能
 
@@ -146,6 +163,8 @@ BUILD_CONFIG=build.config.nethunter-cfi ./build/build.sh 2>&1 | tee build.log
 │   └── anykernel.sh                   # AnyKernel3 脚本
 ├── scripts/
 │   └── build.sh
+├── china-telecom/
+│   └── cnmbn/                         # 中国大陆电信 MBN 模块（KernelSU）
 ├── docs/
 │   ├── 技术说明.md                    # 内核设计要点与关键配置理由
 │   └── 构建与刷入.md                  # 环境、编译、打包、刷入、验证、回退
