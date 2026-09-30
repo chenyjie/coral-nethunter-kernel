@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 524d3ae37..b255647e7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -540,7 +540,7 @@ else
+ CLANG_FLAGS	+= --target=$(CLANG_TARGET_FLAGS)
+ endif # CLANG_TARGET_FLAGS
+ else
+-CLANG_FLAGS	+= --target=$(notdir $(CROSS_COMPILE:%-=%))
++CLANG_FLAGS	+= --target=$(CLANG_TARGET_FLAGS)
+ endif # CROSS_COMPILE
+ 
+ ifeq ($(LLVM_IAS),0)

@@ -1,0 +1,32 @@
+diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+index 6e8ca2def..9c17d94c3 100644
+--- a/drivers/misc/Kconfig
++++ b/drivers/misc/Kconfig
+@@ -598,6 +598,15 @@ config ACCESS_RAMOOPS
+ 	help
+ 	  Say 'y' if ramoops is encrypted.
+ 
++config KPANIC_LOGGER
++	bool "Plaintext panic log recorder (debug)"
++	depends on PRINTK
++	default n
++	help
++	  Dump the kernel log into a reserved RAM region as plain text on
++	  panic/oops, plus boot-stage traces. Read back as root from
++	  /dev/access-ramoops.
++
+ config FACEAUTH
+ 	tristate "EL1 Driver for Google Face Authentication"
+ 	depends on MFD_ABC_PCIE
+diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+index 03196ae58..1f4ae9f16 100644
+--- a/drivers/misc/Makefile
++++ b/drivers/misc/Makefile
+@@ -88,6 +88,7 @@ lkdtm-$(CONFIG_LKDTM)		+= lkdtm_rodata_objcopy.o
+ lkdtm-$(CONFIG_LKDTM)		+= lkdtm_usercopy.o
+ 
+ obj-$(CONFIG_ACCESS_RAMOOPS)    += access_ramoops.o
++obj-$(CONFIG_KPANIC_LOGGER)    += kpanic_logger.o
+ 
+ KASAN_SANITIZE_lkdtm_rodata.o	:= n
+ KCOV_INSTRUMENT_lkdtm_rodata.o	:= n

@@ -1,0 +1,33 @@
+KERNEL_DIR=private/msm-google
+. ${ROOT_DIR}/${KERNEL_DIR}/build.config.floral.common.clang
+EXT_MODULES=""
+POST_DEFCONFIG_CMDS="nethunter_config"
+
+# NOTE: intentionally do NOT source build.config.floral_no-cfi and do NOT run
+# update_nocfi_config.  The device vendor modules in /vendor/lib/modules are
+# CFI-instrumented (.cfi_jt / __cfi_check) and the running stock kernel is
+# built with CONFIG_CFI_CLANG=y + CONFIG_LTO_CLANG=y.  Stripping CFI/LTO is the
+# single verified delta vs the known-good kernel and is the prime suspect for
+# the boot hang; keep them on.
+function nethunter_config() {
+  local args=()
+  local sets=()
+  local opt
+  while read -r opt; do
+    [ -z "$opt" ] && continue
+    case "$opt" in \#*) continue;; esac
+    case "$opt" in
+      -*)  args+=(-d "${opt#-}") ;;
+      *=*) sets+=(--set-val "${opt%%=*}" "${opt#*=}") ;;
+      *)   args+=(-e "$opt") ;;
+    esac
+  done < "${ROOT_DIR}/nethunter.config"
+  echo "NetHunter(CFI): applying ${#args[@]} toggle(s), ${#sets[@]} value(s)"
+  if [ ${#args[@]} -gt 0 ]; then
+    "${KERNEL_DIR}/scripts/config" --file "${OUT_DIR}/.config" "${args[@]}"
+  fi
+  if [ ${#sets[@]} -gt 0 ]; then
+    "${KERNEL_DIR}/scripts/config" --file "${OUT_DIR}/.config" "${sets[@]}"
+  fi
+  (cd "${OUT_DIR}" && make ${CC_LD_ARG} O="${OUT_DIR}" olddefconfig)
+}

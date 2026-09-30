@@ -1,0 +1,5 @@
+# 构建产物与大型二进制不提交
+release/*.zip
+release/*.img
+*.log
+out/
